@@ -32,7 +32,7 @@ const ScrollAnimation = ({
       transition: {
         duration: 0.6,
         delay,
-        ease: [0.25, 0.25, 0, 1],
+        ease: [0.25, 0.25, 0, 1] as const,
       },
     },
   };

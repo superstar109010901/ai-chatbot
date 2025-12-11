@@ -25,7 +25,7 @@ const ChatboxModal = () => {
       y: 0,
       transition: {
         duration: 0.3,
-        ease: "easeOut",
+        ease: [0.0, 0.0, 0.58, 1.0] as const,
       },
     },
     exit: {
@@ -34,7 +34,7 @@ const ChatboxModal = () => {
       y: 20,
       transition: {
         duration: 0.2,
-        ease: "easeIn",
+        ease: [0.42, 0.0, 1.0, 1.0] as const,
       },
     },
   };
@@ -219,7 +219,7 @@ const ChatboxModal = () => {
                 <button
                   onClick={() => setActiveTab("chat")}
                   className={`flex flex-col items-center gap-2 py-2 px-4 rounded transition-opacity ${
-                    activeTab === "chat" ? "opacity-100" : "opacity-50"
+                    (activeTab as "home" | "chat") === "chat" ? "opacity-100" : "opacity-50"
                   }`}
                 >
                 <svg

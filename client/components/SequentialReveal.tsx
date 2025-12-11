@@ -37,7 +37,7 @@ const SequentialReveal = ({
       filter: "blur(0px)",
       transition: {
         duration: 0.8,
-        ease: [0.25, 0.25, 0, 1],
+        ease: [0.25, 0.25, 0, 1] as const,
       },
     },
   };
