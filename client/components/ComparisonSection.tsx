@@ -20,34 +20,7 @@ export default function ComparisonSection() {
 
   const PulseChatLogo = () => (
     <div className="flex items-center gap-[7px] justify-center">
-      <svg
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-6 h-6"
-      >
-        <path
-          d="M0 10C0 4.47715 4.47715 0 10 0H14C19.5228 0 24 4.47715 24 10V24H10C4.47715 24 0 19.5228 0 14V10Z"
-          fill="url(#paint0_linear)"
-        />
-        <path d="M10.4641 9L13.9282 15H7L10.4641 9Z" fill="white" />
-        <path d="M14.4636 14L10.9995 8L17.9277 8L14.4636 14Z" fill="white" />
-        <defs>
-          <linearGradient
-            id="paint0_linear"
-            x1="12"
-            y1="0"
-            x2="12"
-            y2="28"
-            gradientUnits="userSpaceOnUse"
-          >
-            <stop stopColor="#435CED" />
-            <stop offset="1" stopColor="#263487" />
-          </linearGradient>
-        </defs>
-      </svg>
+      <img src="/logo.svg" alt="PulseChat"  />
       <span className="text-white font-[Inter] text-[21px] font-semibold leading-[21px] tracking-[-0.4px]">
         PulseChat
       </span>
@@ -77,7 +50,7 @@ export default function ComparisonSection() {
       <div className="relative z-10 container mx-auto px-4 max-w-[1000px]">
         <ScrollAnimation>
         <div className="flex flex-col items-center gap-8 sm:gap-12 mb-12 sm:mb-16">
-          <div className="inline-flex justify-center items-center rounded-[60px] backdrop-blur-[34px] px-4 py-2 border-l-[2px] border-[#2934FF] ">
+          <div className="inline-flex justify-center items-center rounded-[60px] bg-black backdrop-blur-[34px] px-4 py-2 border-l-[2px] border-[#2934FF] ">
             <span
               className="font-[Poppins] text-sm sm:text-base font-semibold leading-[25.6px] tracking-[-0.32px]"
               style={{
@@ -102,14 +75,18 @@ export default function ComparisonSection() {
         </div>
         </ScrollAnimation>
 
-        {/* Mobile Single Card Layout */}
+        {/* Mobile Two Column Layout */}
         <ScrollAnimation delay={0.2}>
-        <div className="lg:hidden">
+        <div className="lg:hidden flex-col gap-3 sm:gap-4 items-center justify-center overflow-x-auto pb-4">
           <ComparisonCard
-            type="mobile"
+            type="positive"
             features={pulsechatFeatures}
-            othersFeatures={othersFeatures}
             logo={<PulseChatLogo />}
+          />
+          <ComparisonCard
+            type="negative"
+            title="Others"
+            features={othersFeatures}
           />
         </div>
         </ScrollAnimation>

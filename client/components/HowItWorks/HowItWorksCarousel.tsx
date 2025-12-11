@@ -1,5 +1,3 @@
-import { useState } from "react";
-import { ChevronDown } from "lucide-react";
 
 interface Step {
   id: number;
@@ -25,27 +23,28 @@ const HowItWorksCarousel = ({
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Icon Buttons - Top Navigation */}
-      <div className="flex justify-center gap-4 md:gap-6">
-        {steps.map((step) => (
-          <button
-            key={step.id}
-            onClick={() => onStepChange(step.id)}
-            className={`relative flex-shrink-0 w-20 h-20 md:w-24 md:h-24 rounded-2xl md:rounded-3xl transition-all duration-300 flex items-center justify-center ${
-              activeStep === step.id
-                ? "bg-blue-600/20 border-2 border-blue-500/50 shadow-lg shadow-blue-500/20"
-                : "bg-blue-600/10 border-2 border-transparent hover:bg-blue-600/15"
-            }`}
-            aria-label={step.label}
-          >
-            <div className="flex items-center justify-center">
-              {step.icon}
-            </div>
-            {activeStep === step.id && (
-              <div className="absolute inset-0 rounded-2xl md:rounded-3xl border-2 border-blue-500/50 animate-pulse" />
-            )}
-          </button>
-        ))}
+      {/* Tab Navigation - Matching Desktop Style */}
+      <div className="relative bg-gradient-to-b from-[#121426] to-black rounded-t-[16px] border border-white/8 h-[112px] overflow-x-auto">
+        {/* Gradient background effect */}
+        <div className="absolute inset-0 rounded-3xl bg-radial-gradient opacity-20" />
+        
+        <div className="relative flex items-center justify-center w-full px-4 sm:px-6 lg:px-[48px] h-full gap-3 sm:gap-4 md:gap-6 lg:gap-8">
+          {steps.map((step) => (
+            <button
+              key={step.id}
+              onClick={() => onStepChange(step.id)}
+              className={`flex-shrink-0 flex-1 h-[81px] rounded-3xl p-4 sm:p-[22px_21px] transition-all duration-300 flex items-center justify-center gap-3 sm:gap-4 whitespace-nowrap ${
+                activeStep === step.id
+                  ? "bg-card/40 shadow-[0px_0px_4px_0px_#2934FF54]"
+                  : "hover:bg-white/5"
+              }`}
+              aria-label={step.label}
+            >
+              <div className="flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8">{step.icon}</div>
+              
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Content Card */}

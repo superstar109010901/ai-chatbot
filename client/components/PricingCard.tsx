@@ -34,16 +34,10 @@ export default function PricingCard({
 
   return (
     <div
-      className={`flex flex-col items-center rounded-[16px] w-full relative ${
-        isPro ? "lg:scale-105" : ""
-      }`}
+      className={`flex flex-col items-center bg-[radial-gradient(circle_at_top,_#121426,_#000000)] rounded-[16px] border-t border-r h-full border-[#8AA5FF]  w-full relative`}
     >
       <div
-        className={`flex flex-col justify-center items-start gap-6 rounded-[16px] w-full p-6 lg:p-8 ${
-          isPro
-            ? "bg-gradient-to-br from-blue-900/40 to-purple-900/30 backdrop-blur-sm border border-white/10"
-            : "bg-card/30 backdrop-blur-sm border border-white/5"
-        }`}
+        className={`flex flex-col justify-center items-start gap-6 rounded-[16px] w-full p-6 lg:p-8 `}
       >
         <div className="flex flex-col justify-center items-start gap-4 w-full">
           <div className="flex items-end gap-2 w-full flex-wrap">

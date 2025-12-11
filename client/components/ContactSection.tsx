@@ -37,12 +37,12 @@ const ContactSection = () => {
   };
 
   return (
-    <section className="relative w-full bg-background overflow-hidden py-16 sm:py-20 lg:py-24">
+    <section className="relative w-full bg-[radial-gradient(circle_at_center,_#1A5F8F_0%,_#050C18_0%,_#000102_100%)] overflow-hidden py-16 sm:py-20 lg:py-24">
       {/* Background Effects */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-32 -left-40 w-96 h-96 bg-gradient-to-br from-blue-600/20 to-transparent rounded-full blur-3xl opacity-40" />
         <div className="absolute top-1/2 -left-20 w-80 h-80 bg-blue-900/15 rounded-full blur-3xl" />
-      </div>
+      </div> */}
 
       {/* Content */}
       <div className="relative z-10 container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -51,7 +51,7 @@ const ContactSection = () => {
         <div className="lg:hidden flex flex-col items-center gap-8 mb-12">
           {/* Contact Badge */}
           <div className="inline-flex items-center gap-2 w-fit">
-            <div className="px-4 py-2 rounded-full border-l-[2px] border-[#2934FF] bg-blue-500/5 backdrop-blur-sm">
+            <div className="px-4 py-2 rounded-full border-l-[2px] border-[#2934FF] bg-black backdrop-blur-sm">
               <span className="text-sm font-semibold text-blue-400">
                 CONTACT US
               </span>
@@ -71,9 +71,9 @@ const ContactSection = () => {
           </p>
 
           {/* Contact Details */}
-          <div className="flex flex-col items-center gap-4">
-            <p className="text-sm text-blue-300/70 font-medium">Contacts</p>
-            <div className="flex flex-col gap-2 pl-6 border-l-2 border-blue-500/50">
+          <div className="flex flex-col px-6 justify-center h-[127px] bg-[#FFFFFF0F] border-l-[9px] border-[#6A99F757] items-center gap-4">
+            <p className="text-sm text-[#E6ECFFB2] border-b-[1px] border-[#FFFFFF30] text-[16px] w-full">Contacts</p>
+            <div className="flex flex-col gap-2 ">
               <a
                 href="mailto:Help@pulsechatai.com"
                 className="text-base text-white hover:text-blue-400 transition-colors"
@@ -174,7 +174,7 @@ const ContactSection = () => {
           <div className="flex flex-col gap-8 justify-center">
             {/* Contact Badge */}
             <div className="inline-flex items-center gap-2 w-fit">
-              <div className="px-4 py-2 rounded-full border-l-[2px] border-[#2934FF] bg-blue-500/5 backdrop-blur-sm">
+              <div className="px-4 py-2 rounded-full border-l-[2px] border-[#2934FF] bg-black backdrop-blur-sm">
                 <span className="text-sm font-semibold text-blue-400">
                   CONTACT US
                 </span>

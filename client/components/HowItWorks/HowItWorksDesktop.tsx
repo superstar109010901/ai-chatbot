@@ -34,14 +34,14 @@ const HowItWorksDesktop = ({
             <button
               key={step.id}
               onClick={() => onStepChange(step.id)}
-              className={`flex-shrink-0 flex-1 h-[81px] rounded-3xl w-full p-[22px_21px] transition-all duration-300 flex items-center gap-4 whitespace-nowrap ${
+              className={`flex-shrink-0 flex-1 h-[81px] rounded-3xl w-full p-[22px_21px] transition-all duration-300 flex items-center justify-center gap-4 whitespace-nowrap ${
                 activeStep === step.id
                   ? "bg-card/40  shadow-[0px_0px_4px_0px_#2934FF54] "
                   : "hover:bg-white/5"
               }`}
             >
               <div className="flex-shrink-0 w-8 h-8">{step.icon}</div>
-              <div className="text-left flex justify-between gap-16 w-full items-center">
+              <div className="text-left flex justify-between gap-16 w-full max-[1270px]:hidden items-center">
                 <div className="text-foreground font-normal text-lg">
                   {step.label} 
                 </div>
@@ -55,9 +55,9 @@ const HowItWorksDesktop = ({
       </div>
 
       {/* Content Area */}
-      <div className="flex gap-16 items-center pt-[115.87px]   bg-gradient-to-b from-[#121426] to-[#000210]">
+      <div className="flex flex-row max-[1270px]:flex-col gap-16 items-center pt-[115.87px] bg-gradient-to-b from-[#121426] to-[#000210]">
         {/* Left Content */}
-        <div className="flex flex-col w-[35%] justify-center pl-[48px] space-y-8">
+        <div className="flex flex-col w-[35%] max-[1270px]:w-full justify-center pl-[48px] max-[1270px]:px-[48px] space-y-8">
           {/* Step Number */}
           <div className="text-[48px] font-bold text-gray-500 leading-none">
             {String(currentStep.id).padStart(2, "0")}.
@@ -84,7 +84,7 @@ const HowItWorksDesktop = ({
         </div>
 
         {/* Right Content - Dynamic based on step */}
-          <img src={"/step-" + activeStep + ".png"} className="w-[65%] h-full object-cover" alt="howtodoit" />
+        <img src={"/step-" + activeStep + ".png"} className="w-[65%] max-[1270px]:w-full h-full object-cover max-[1270px]:mt-8" alt="howtodoit" />
       </div>
     </div>
   );

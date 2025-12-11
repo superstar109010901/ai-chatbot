@@ -1,8 +1,10 @@
+import { useState } from "react";
 import TrustedByCompanies from "./TrustedByCompanies";
 import { useAuth } from "./AuthContext";
 import Starfield from "./Starfield";
 import SequentialReveal from "./SequentialReveal";
 import AnimatedChatBubble from "./AnimatedChatBubble";
+import { ChatbotSettingsModal } from "./ChatbotSettingModal";
 import { motion } from "framer-motion";
 
 const BotIcon = () => (
@@ -53,8 +55,14 @@ const BotIcon = () => (
 
 const HeroSection = () => {
   const { openLoginModal } = useAuth();
+  const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
+  
   return (
     <>
+    <ChatbotSettingsModal 
+      open={isDemoModalOpen} 
+      onOpenChange={setIsDemoModalOpen} 
+    />
     <section className="relative w-full bg-background overflow-hidden pt-12 sm:pt-20 pb-4 sm:pb-4 lg:min-h-screen lg:pt-20">
       {/* Background Effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -75,7 +83,7 @@ const HeroSection = () => {
       </div>
 
       {/* Content */}
-      <div className="relative sm:mt-12 lg:mt-24 mt-12 z-10  lg:mx-20 max-w-10xl w-full mx-auto sm:px-0 sm:px-6 lg:px-8">
+      <div className="relative sm:mt-12 lg:mt-24 mt-12 z-10  lg:mx-20 max-w-10xl w-full mx-auto sm:px-6 lg:px-8">
         {/* Mobile Layout */}
         <div className="lg:hidden flex flex-col items-center gap-6 sm:gap-8">
           <SequentialReveal className="flex flex-col items-center gap-6 sm:gap-8 w-full" staggerDelay={0.2} initialDelay={0.3}>
@@ -115,14 +123,14 @@ const HeroSection = () => {
 
             {/* Main Heading */}
             <div className="space-y-3 sm:space-y-4 text-center max-w-md">
-              <h1 className="text-3xl sm:text-4xl font-medium leading-tight">
+              <h1 className="text-[46px] sm:text-[48px] font-medium leading-tight">
                 <span className="text-white">AI Chatbots</span> <br/>
                 <span> That Empower Your </span>
                 <span className="text-primary">Business</span>
               </h1>
 
               {/* Subheading */}
-              <p className="text-sm sm:text-base text-foreground/70 leading-relaxed">
+              <p className="text-[16px] line-height-[25.6px] font-normal letter-spacing-[-0.32px] px-6 sm:text-base text-foreground/70 leading-relaxed">
                 Engage customers, automate tasks, and boost sales with our
                 intelligent AI chatbot — ready to deploy on any website or
                 messaging platform
@@ -130,14 +138,17 @@ const HeroSection = () => {
             </div>
 
             {/* CTA Buttons */}
-            <div className="w-full flex flex-col sm:flex-row gap-3 sm:gap-2.5 max-w-sm mx-auto">
+            <div className="w-full flex gap-3 sm:gap-2.5 ">
               <button
                 onClick={openLoginModal}
-                className="flex-1 px-6 py-3 sm:py-3.5 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium text-sm sm:text-base hover:shadow-lg transition-all shadow-[0_8px_40px_0_rgba(0,85,254,0.5),0_0_0_1px_rgba(0,32,158,0.12)]"
+                className="px-6 py-3 w-[173px] h-[63px] sm:py-3.5 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium text-sm sm:text-base hover:shadow-lg transition-all shadow-[0_8px_40px_0_rgba(0,85,254,0.5),0_0_0_1px_rgba(0,32,158,0.12)]"
               >
                 Get Started
               </button>
-              <button className="flex-1 px-6 py-3 sm:py-3.5 rounded-lg border border-blue-500 bg-transparent text-white font-medium text-sm sm:text-base hover:bg-blue-500/10 transition-colors">
+              <button 
+                onClick={() => setIsDemoModalOpen(true)}
+                className="px-6 py-3 w-[173px] h-[63px] sm:py-3.5 rounded-lg border border-blue-500 bg-transparent text-white font-medium text-sm sm:text-base hover:bg-blue-500/10 transition-colors"
+              >
                 Book Demo
               </button>
             </div>
@@ -217,7 +228,10 @@ const HeroSection = () => {
               >
                 Get Started
               </button>
-              <button className="px-8 py-3.5 rounded-lg border border-blue-500 bg-transparent text-white font-medium text-sm hover:bg-blue-500/10 transition-colors">
+              <button 
+                onClick={() => setIsDemoModalOpen(true)}
+                className="px-8 py-3.5 rounded-lg border border-blue-500 bg-transparent text-white font-medium text-sm hover:bg-blue-500/10 transition-colors"
+              >
                 Book Demo
               </button>
             </div>

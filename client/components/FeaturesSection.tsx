@@ -227,7 +227,7 @@ const FeaturesSection = () => {
           <div className="text-center mb-12 sm:mb-16">
           {/* Badge */}
           <div className="inline-flex items-center justify-center mb-6 sm:mb-8">
-            <div className="px-4 py-2 rounded-full backdrop-blur-[34px] border-l-[2px] border-[#2934FF]">
+            <div className="px-4 py-2 rounded-full backdrop-blur-[34px] bg-black border-l-[2px] border-[#2934FF]">
               <span className="font-semibold text-sm sm:text-base tracking-tight bg-gradient-to-r from-white to-white/90 bg-clip-text"
                style={{
                 background: "linear-gradient(135deg, #8AA5FF 0%, #435CED 100%)",

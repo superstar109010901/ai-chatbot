@@ -1,5 +1,10 @@
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, FreeMode } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/autoplay";
+import "swiper/css/free-mode";
+
 const TrustedByCompanies = () => {
-  // Duplicate logos for seamless infinite scroll
   const logos = [
     {
       name: "Risk",
@@ -93,82 +98,70 @@ const TrustedByCompanies = () => {
   ];
 
   return (
-    <div className="relative py-4 bg-background border-t border-border/50">
+    <div className="relative py-4 ">
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title */}
-        <p className="text-center text-white/60 text-sm text-muted-foreground mb-8">
+        <p className=" text-white/60 text-sm text-muted-foreground mb-8">
           Trusted by companies
         </p>
 
-        {/* Logos Container - Infinite Scroll Animation */}
+        {/* Logos Container - Swiper Carousel */}
         <div className="relative overflow-hidden pb-4">
           {/* Gradient overlays for smooth fade effect */}
           <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
           <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
           
-          {/* Animated scrolling container - seamless infinite loop */}
-          <div className="flex items-center gap-8 sm:gap-12 animate-scroll-infinite">
-            {/* First set of logos */}
-            {logos.map((logo, index) => (
-              <div
-                key={`first-${index}`}
-                className="flex-shrink-0 opacity-65 hover:opacity-100 transition-opacity"
-              >
-                {logo.svg ? (
-                  <div className="w-24 h-8 flex items-center justify-center">
-                    {logo.svg}
+          <Swiper
+            modules={[Autoplay, FreeMode]}
+            spaceBetween={32}
+            slidesPerView="auto"
+            freeMode={true}
+            grabCursor={true}
+            loop={true}
+            loopAdditionalSlides={6}
+            autoplay={{
+              delay: 1,
+              disableOnInteraction: false,
+              pauseOnMouseEnter: true,
+            }}
+            speed={3000}
+            allowTouchMove={true}
+            breakpoints={{
+              640: {
+                spaceBetween: 48,
+              },
+            }}
+            className="!overflow-visible"
+            style={{
+              width: "100%",
+            }}
+          >
+            {/* Duplicate logos multiple times for seamless infinite loop */}
+            {[...Array(3)].map((_, setIndex) =>
+              logos.map((logo, index) => (
+                <SwiperSlide
+                  key={`set-${setIndex}-logo-${index}`}
+                  style={{ width: "auto" }}
+                  className="!w-auto"
+                >
+                  <div className="flex-shrink-0 opacity-65 hover:opacity-100 transition-opacity">
+                    {logo.svg ? (
+                      <div className="w-24 h-8 flex items-center justify-center">
+                        {logo.svg}
+                      </div>
+                    ) : (
+                      <img
+                        src={logo.src}
+                        alt={logo.name}
+                        className="h-8 object-contain"
+                        loading="lazy"
+                      />
+                    )}
                   </div>
-                ) : (
-                  <img
-                    src={logo.src}
-                    alt={logo.name}
-                    className="h-8 object-contain"
-                    loading="lazy"
-                  />
-                )}
-              </div>
-            ))}
-            {/* Duplicate set for seamless loop - exact copy */}
-            {logos.map((logo, index) => (
-              <div
-                key={`second-${index}`}
-                className="flex-shrink-0 opacity-65 hover:opacity-100 transition-opacity"
-              >
-                {logo.svg ? (
-                  <div className="w-24 h-8 flex items-center justify-center">
-                    {logo.svg}
-                  </div>
-                ) : (
-                  <img
-                    src={logo.src}
-                    alt={logo.name}
-                    className="h-8 object-contain"
-                    loading="lazy"
-                  />
-                )}
-              </div>
-            ))}
-            {/* Third set for extra smoothness - ensures no visible gap */}
-            {logos.map((logo, index) => (
-              <div
-                key={`third-${index}`}
-                className="flex-shrink-0 opacity-65 hover:opacity-100 transition-opacity"
-              >
-                {logo.svg ? (
-                  <div className="w-24 h-8 flex items-center justify-center">
-                    {logo.svg}
-                  </div>
-                ) : (
-                  <img
-                    src={logo.src}
-                    alt={logo.name}
-                    className="h-8 object-contain"
-                    loading="lazy"
-                  />
-                )}
-              </div>
-            ))}
-          </div>
+                </SwiperSlide>
+              ))
+            )}
+          </Swiper>
         </div>
       </div>
     </div>

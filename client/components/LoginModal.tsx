@@ -51,7 +51,7 @@ const LoginModal = () => {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+        <div className="fixed inset-0 z-50 flex  items-center justify-center px-4">
           {/* Dark Overlay */}
           <motion.div
             className="absolute inset-0 bg-black/70 backdrop-blur-sm"
@@ -64,7 +64,7 @@ const LoginModal = () => {
 
           {/* Modal */}
           <motion.div
-            className="relative w-full max-w-md bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl border border-blue-500/30 shadow-2xl overflow-hidden"
+            className="relative w-full max-w-[680px] backdrop-blur-md bg-[#0000001A]  rounded-2xl border border-[#0055FF80] shadow-2xl overflow-hidden"
             variants={modalVariants}
             initial="hidden"
             animate="visible"
@@ -77,10 +77,10 @@ const LoginModal = () => {
             </div>
 
             {/* Content */}
-            <div className="relative p-8 sm:p-10 z-10">
+            <div className="relative p-[4.5rem] z-10">
               {/* Header */}
               <div className="text-center mb-8">
-                <h2 className="text-3xl sm:text-4xl font-bold text-white mb-2">
+                <h2 className="text-3xl sm:text-4xl font-bold font-[Roboto] line-height-[110px] text-white mb-10">
                   Welcome Back
                 </h2>
                 <p className="text-gray-400 text-sm sm:text-base">
@@ -101,7 +101,7 @@ const LoginModal = () => {
                     placeholder="Placeholder"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/70 focus:bg-slate-700/70 transition-all"
+                    className="w-full px-4 py-3 bg-transparent border border-slate-600/50 rounded-lg text-white placeholder-gray-500 focus:outline-none  transition-all"
                   />
                 </div>
 
@@ -117,7 +117,7 @@ const LoginModal = () => {
                       placeholder="Placeholder"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/70 focus:bg-slate-700/70 transition-all"
+                      className="w-full px-4 py-3 bg-transparent border border-slate-600/50 rounded-lg text-white placeholder-gray-500 focus:outline-none transition-all"
                     />
                     <button
                       type="button"
@@ -187,25 +187,22 @@ const LoginModal = () => {
                   {
                     name: "Google",
                     icon: (
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M6.37568 10.068C6.16293 10.6899 6.05479 11.3427 6.05568 12C6.05568 12.734 6.18768 13.437 6.43168 14.086C6.73579 14.8972 7.21347 15.6321 7.83131 16.2393C8.44915 16.8466 9.19222 17.3115 10.0085 17.6015C10.8248 17.8916 11.6947 17.9998 12.5571 17.9185C13.4196 17.8372 14.2539 17.5684 15.0017 17.131H15.0027C16.1807 16.4404 17.0859 15.3661 17.5667 14.088H12.2197V10.132H21.8247C22.0731 11.4405 22.0581 12.7854 21.7807 14.088C21.2999 16.3399 20.0565 18.3568 18.2607 19.798C16.4869 21.2264 14.2771 22.0035 11.9997 22C10.2826 22.001 8.5943 21.5597 7.09731 20.7187C5.60032 19.8778 4.34513 18.6655 3.45269 17.1986C2.56024 15.7317 2.06061 14.0597 2.00193 12.3437C1.94326 10.6276 2.32751 8.92542 3.11768 7.401C3.96065 5.77291 5.23506 4.40796 6.80155 3.4554C8.36805 2.50284 10.1663 1.99936 11.9997 2C14.4257 2 16.6507 2.864 18.3827 4.302L15.1427 6.954C14.3837 6.48164 13.528 6.18643 12.6392 6.09034C11.7504 5.99424 10.8514 6.09972 10.009 6.39894C9.16658 6.69816 8.40245 7.18342 7.77342 7.81864C7.14439 8.45386 6.66663 9.2227 6.37568 10.068Z" fill="currentColor" />
-                      </svg>
+                      
+                      <img src="https://www.google.com/images/branding/googleg/1x/googleg_standard_color_128dp.png" alt="Google" width={20} height={20} />
+                      
                     ),
                   },
                   {
                     name: "Apple",
                     icon: (
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M17.123 12.627C17.098 10.094 19.189 8.879 19.282 8.819C18.107 7.099 16.277 6.864 15.625 6.837C14.068 6.679 12.586 7.754 11.795 7.754C11.007 7.754 9.78701 6.86 8.49501 6.884C6.79901 6.909 5.23401 7.87 4.36001 9.39C2.59601 12.45 3.90801 16.985 5.62701 19.467C6.46701 20.682 7.46901 22.047 8.78401 21.997C10.05 21.947 10.529 21.178 12.06 21.178C13.591 21.178 14.022 21.998 15.362 21.973C16.725 21.947 17.588 20.734 18.422 19.516C19.387 18.106 19.784 16.741 19.808 16.671C19.778 16.658 17.15 15.651 17.124 12.626L17.123 12.627ZM14.605 5.194C15.303 4.347 15.774 3.172 15.645 2C14.64 2.04 13.421 2.67 12.7 3.515C12.053 4.265 11.486 5.46 11.638 6.609C12.76 6.697 13.906 6.039 14.605 5.194Z" fill="currentColor" />
-                      </svg>
+                      <img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/apple.svg" alt="apple" width={20} height={20} />
+
                     ),
                   },
                   {
                     name: "Twitter",
                     icon: (
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M22 5.90692C21.2504 6.2343 20.4565 6.44896 19.644 6.54392C20.4968 6.04315 21.138 5.24903 21.448 4.30992C20.64 4.78025 19.7587 5.11152 18.841 5.28992C18.4545 4.88513 17.9897 4.56331 17.4748 4.3441C16.9598 4.12489 16.4056 4.01289 15.846 4.01492C13.58 4.01492 11.743 5.82492 11.743 8.05492C11.743 8.37092 11.779 8.67992 11.849 8.97492C10.2236 8.89761 8.63212 8.48233 7.17617 7.75556C5.72022 7.02879 4.43176 6.0065 3.393 4.75392C3.02883 5.36832 2.83742 6.0697 2.839 6.78392C2.8397 7.45189 3.00683 8.10915 3.32529 8.69631C3.64375 9.28348 4.1035 9.78203 4.663 10.1469C4.01248 10.1259 3.37602 9.95225 2.805 9.63992V9.68992C2.805 11.6479 4.22 13.2809 6.095 13.6529C5.74261 13.7464 5.37958 13.7938 5.015 13.7939C4.75 13.7939 4.493 13.7689 4.242 13.7189C4.51008 14.5268 5.02311 15.2312 5.70982 15.7343C6.39653 16.2373 7.22284 16.514 8.074 16.5259C6.61407 17.6505 4.82182 18.258 2.979 18.2529C2.647 18.2529 2.321 18.2329 2 18.1969C3.88125 19.3876 6.06259 20.0182 8.289 20.0149C15.836 20.0149 19.962 13.8579 19.962 8.51892L19.948 7.99592C20.7529 7.42959 21.4481 6.72177 22 5.90692Z" fill="currentColor" />
-                      </svg>
+                      <img src="https://abs.twimg.com/responsive-web/client-web/icon-ios.8ea219d5.png" alt="Twitter" width={20} className="rounded-full overflow-hidden" height={20} />
                     ),
                   },
                 ].map((social) => (

@@ -43,7 +43,7 @@ export default function PricingToggle({ onToggle }: PricingToggleProps) {
           <span className="font-[Poppins] text-base font-normal leading-[25.6px] tracking-[-0.32px] opacity-90">
             Yearly
           </span>
-          <div className="flex items-center justify-center h-[38px] px-4 rounded-[192px] bg-primary/10">
+          <div className="flex items-center justify-center h-[38px] px-4 rounded-[192px] bg-[#031457]">
             <span className="text-[rgba(230,236,255,0.7)] font-[Poppins] text-base font-normal leading-[25.6px] tracking-[-0.32px] opacity-90 whitespace-nowrap">
               30% off
             </span>

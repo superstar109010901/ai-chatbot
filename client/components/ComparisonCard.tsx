@@ -30,7 +30,7 @@ export default function ComparisonCard({
   // Mobile layout - single card with both sections
   if (type === "mobile") {
     return (
-      <div className="w-full max-w-md mx-auto">
+      <div className="w-full  mx-auto">
         <div className="rounded-[16px] border border-white/[0.07] bg-gradient-to-b from-[#121426] to-[#000000] backdrop-blur-sm overflow-hidden">
           {/* PulseChat Section */}
           <div className="px-6 py-6 sm:px-8 sm:py-8 ">
@@ -91,39 +91,38 @@ export default function ComparisonCard({
     );
   }
 
-  // Desktop layout - separate cards
+  // Desktop layout - separate cards (also used for mobile side-by-side)
   return (
-    <div className="w-full max-w-[488px] flex flex-col">
+    <div className="w-[90%] sm:w-[calc(50%-8px)] lg:w-[488px] flex-shrink-0 justify-center m-auto flex flex-col">
       {/* Header */}
-      <div className="h-16 flex items-center justify-center mb-1 px-6">
+      <div className="h-12 sm:h-16 flex items-center justify-center mb-1 px-4 sm:px-6">
         {logo ? (
-          logo
+          <div className="scale-90 sm:scale-100">{logo}</div>
         ) : (
-          <h3 className="text-white text-2xl font-medium font-poppins tracking-[-0.48px]">
+          <h3 className="text-white text-lg sm:text-xl lg:text-2xl font-medium font-poppins tracking-[-0.48px]">
             {title}
           </h3>
         )}
       </div>
-
       {/* Card Container */}
-      <div className="rounded-[16px] border border-white/[0.07] bg-gradient-to-b from-[#121426] to-[#000000] backdrop-blur-sm overflow-hidden">
+      <div className="rounded-[16px] border-t-[1px] border-[#8AA5FF] bg-[radial-gradient(circle_at_center,#121426,#000000)] backdrop-blur-sm overflow-hidden">
         {/* Points Container */}
-        <div className="flex flex-col px-7 py-8 gap-5">
+        <div className="flex flex-col px-4 sm:px-6 lg:px-7 py-6 sm:py-7 lg:py-8 gap-4 sm:gap-5">
           {features.map((feature, index) => (
             <div key={index} className="flex flex-col">
               {/* Point Item */}
-              <div className="flex items-center gap-2.5 h-[26px]">
+              <div className="flex items-center gap-2 sm:gap-2.5 h-auto sm:h-[26px]">
                 <div className="flex-shrink-0">
                   <Icon />
                 </div>
-                <p className="text-[rgba(230,236,255,0.7)] font-poppins text-base font-normal leading-[25.6px] tracking-[-0.32px]">
+                <p className="text-[rgba(230,236,255,0.7)] font-poppins text-xs sm:text-sm lg:text-base font-normal leading-[20px] sm:leading-[25.6px] tracking-[-0.32px]">
                   {feature}
                 </p>
               </div>
 
               {/* Separator */}
               {index < features.length - 1 && (
-                <div className="w-full h-px bg-white/10 mt-5" />
+                <div className="w-full h-px bg-white/10 mt-4 sm:mt-5" />
               )}
             </div>
           ))}

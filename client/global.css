@@ -1,5 +1,5 @@
 /** @import must precede all other statements */
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;600;700;800&family=Roboto:wght@400;600;700;800&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -157,4 +157,94 @@
 
 * {
   font-family: 'Poppins', 'Inter', sans-serif;
+}
+
+/* Swiper pagination custom styles */
+.swiper-pagination {
+  position: relative !important;
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.swiper-pagination-bullet {
+  width: 0.625rem !important;
+  height: 0.625rem !important;
+  border-radius: 9999px !important;
+  border: 1px solid rgba(41, 52, 255, 0.53) !important;
+  background: transparent !important;
+  opacity: 1 !important;
+  transition: all 0.3s ease !important;
+}
+
+.swiper-pagination-bullet-active {
+  width: 3rem !important;
+  height: 0.5rem !important;
+  border-radius: 9999px !important;
+  border: none !important;
+  background: linear-gradient(135deg, #1A47E0 0%, #2934FF 100%) !important;
+  box-shadow: 0 2px 4px 0 rgba(41, 52, 255, 0.25), 0 -2px 4px 0 rgba(41, 52, 255, 0.25) !important;
+}
+
+/* Swiper container and slide positioning */
+.swiper {
+  overflow: visible !important;
+  padding-bottom: 3rem !important;
+}
+
+.swiper-wrapper {
+  display: flex;
+  align-items: stretch;
+}
+
+.swiper-slide {
+  height: auto;
+  display: flex;
+  transition-property: transform;
+  will-change: transform;
+}
+
+/* Ensure smooth dragging */
+.swiper-slide-active {
+  transition-timing-function: ease-out;
+}
+
+/* Better touch handling */
+.swiper {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Smooth continuous scroll for companies carousel */
+.swiper-wrapper {
+  transition-timing-function: linear !important;
+}
+
+/* Custom Scrollbar for Modal */
+.modal-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.modal-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+}
+
+.modal-scrollbar::-webkit-scrollbar-thumb {
+  background: #0055FE;
+  border-radius: 2px;
+}
+
+.modal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #0044CC;
+}
+
+/* Firefox scrollbar for modal */
+.modal-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #0055FE rgba(255, 255, 255, 0.05);
 }

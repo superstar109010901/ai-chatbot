@@ -117,7 +117,7 @@ const HowItWorks = () => {
         {/* Header */}
         <ScrollAnimation>
           <div className="text-center mb-12">
-            <div className="inline-block px-4 py-2 rounded-full backdrop-blur-[34px] border-l-[2px] border-[#2934FF] mb-4">
+            <div className="inline-block px-4 py-2 rounded-full backdrop-blur-[34px] bg-black border-l-[2px] border-[#2934FF] mb-4">
               <span
                 className="font-semibold text-xs sm:text-sm uppercase tracking-wider"
                 style={{
