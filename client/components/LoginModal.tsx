@@ -29,7 +29,7 @@ const LoginModal = () => {
       y: 0,
       transition: {
         duration: 0.3,
-        ease: "easeOut",
+        ease: [0.0, 0.0, 0.58, 1.0] as const,
       },
     },
     exit: {
@@ -38,7 +38,7 @@ const LoginModal = () => {
       y: 20,
       transition: {
         duration: 0.2,
-        ease: "easeIn",
+        ease: [0.42, 0.0, 1.0, 1.0] as const,
       },
     },
   };

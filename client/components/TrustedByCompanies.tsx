@@ -101,7 +101,7 @@ const TrustedByCompanies = () => {
     <div className="relative py-4 ">
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title */}
-        <p className=" text-white/60 text-sm text-muted-foreground mb-8">
+        <p className="text-white/60 text-sm mb-8">
           Trusted by companies
         </p>
 
