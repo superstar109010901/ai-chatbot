@@ -128,7 +128,7 @@ export default function PricingSection() {
               onSwiper={setSwiper}
               modules={[Pagination]}
               spaceBetween={24}
-              slidesPerView={1}
+              slidesPerView="auto"
               centeredSlides={true}
               initialSlide={0}
               grabCursor={true}
@@ -137,28 +137,7 @@ export default function PricingSection() {
               resistance={true}
               resistanceRatio={0.85}
               watchSlidesProgress={true}
-              breakpoints={{
-                640: {
-                  slidesPerView: 1.5,
-                  spaceBetween: 24,
-                  centeredSlides: true,
-                },
-                768: {
-                  slidesPerView: 2,
-                  spaceBetween: 24,
-                  centeredSlides: false,
-                },
-                1024: {
-                  slidesPerView: 2,
-                  spaceBetween: 24,
-                  centeredSlides: false,
-                },
-                1280: {
-                  slidesPerView: 4,
-                  spaceBetween: 24,
-                  centeredSlides: false,
-                },
-              }}
+              
               pagination={{
                 clickable: true,
                 dynamicBullets: false,
@@ -170,7 +149,7 @@ export default function PricingSection() {
               }}
             >
               {pricingPlans.map((plan, index) => (
-                <SwiperSlide key={index} className="!h-auto">
+                <SwiperSlide key={index} className="!h-auto max-w-[382px]">
                   <div className="h-full">
                     <PricingCard
                       planName={plan.planName}

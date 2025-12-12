@@ -34,7 +34,7 @@ export default function PricingCard({
 
   return (
     <div
-      className={`flex flex-col items-center bg-[radial-gradient(circle_at_top,_#121426,_#000000)] rounded-[16px] border-t border-r h-full border-[#8AA5FF]  w-full relative`}
+      className={`flex flex-col w-full items-center bg-[radial-gradient(circle_at_top,_#121426,_#000000)] rounded-[16px] border-t border-r h-full border-[#8AA5FF] relative`}
     >
       <div
         className={`flex flex-col justify-center items-start gap-6 rounded-[16px] w-full p-6 lg:p-8 `}
