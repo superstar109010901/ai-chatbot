@@ -102,9 +102,7 @@ const TrustedByCompanies = () => {
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
 
-        {/* Logos Container - Swiper Carousel */}
         <div className="relative overflow-hidden pb-4">
-          {/* Gradient overlays for smooth fade effect */}
           <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
           <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
           
