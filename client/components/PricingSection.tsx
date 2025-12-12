@@ -129,7 +129,7 @@ export default function PricingSection() {
               modules={[Pagination]}
               spaceBetween={24}
               slidesPerView="auto"
-              centeredSlides={true}
+              centeredSlides={false}
               initialSlide={0}
               grabCursor={true}
               loop={false}
