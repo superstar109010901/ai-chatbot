@@ -131,7 +131,6 @@ const TrustedByCompanies = () => {
               width: "100%",
             }}
           >
-            {/* Duplicate logos multiple times for seamless infinite loop */}
             {[...Array(3)].map((_, setIndex) =>
               logos.map((logo, index) => (
                 <SwiperSlide
