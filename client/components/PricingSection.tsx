@@ -72,7 +72,7 @@ export default function PricingSection() {
   ];
 
   return (
-    <section className="relative w-full py-16 lg:py-24 overflow-hidden">
+    <section id="pricing" className="relative w-full py-16 lg:py-24 overflow-hidden">
       <div
         className="absolute inset-0 opacity-23 pointer-events-none"
         style={{

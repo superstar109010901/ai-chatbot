@@ -28,7 +28,7 @@ export default function ComparisonSection() {
   );
 
   return (
-    <section className="relative w-full py-16 sm:py-20 lg:py-32 overflow-hidden">
+    <section id="benefits" className="relative w-full py-16 sm:py-20 lg:py-32 overflow-hidden">
       <div
         className="absolute inset-0 bg-center bg-cover bg-no-repeat"
         style={{

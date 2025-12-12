@@ -205,7 +205,7 @@ const FeaturesSection = () => {
   );
 
   return (
-    <section className="relative bg-background py-16 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
+    <section id="features" className="relative bg-background py-16 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
       {/* Background image with overlay */}
      <div className="absolute inset-0 overflow-hidden pointer-events-none">
           {/* Background Image */}

@@ -37,7 +37,7 @@ const ContactSection = () => {
   };
 
   return (
-    <section className="relative w-full bg-[radial-gradient(circle_at_center,_#1A5F8F_0%,_#050C18_0%,_#000102_100%)] overflow-hidden py-16 sm:py-20 lg:py-24">
+    <section id="contact" className="relative w-full bg-[radial-gradient(circle_at_center,_#1A5F8F_0%,_#050C18_0%,_#000102_100%)] overflow-hidden py-16 sm:py-20 lg:py-24">
       {/* Background Effects */}
       {/* <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-32 -left-40 w-96 h-96 bg-gradient-to-br from-blue-600/20 to-transparent rounded-full blur-3xl opacity-40" />
