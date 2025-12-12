@@ -31,7 +31,7 @@ const FAQSection = () => {
   };
 
   return (
-    <section id="faq" className="relative w-full bg-[linear-gradient(#000102_30%,#1A5F8F,#00010212_85%)] overflow-hidden py-16 sm:py-20 lg:py-24">
+    <section id="faq" className="relative w-full bg-[linear-gradient(#000102_20%,#1A5F8F,#00010212_85%)] overflow-hidden py-16 sm:py-20 lg:py-24">
       {/* Background Effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
       

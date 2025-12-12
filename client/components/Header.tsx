@@ -25,7 +25,7 @@ const Header = () => {
   return (
     <>
       <header
-        className="fusion-header fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-[1px] border-[#353535]"
+        className="fusion-header fixed top-0 left-0 right-0 z-50 bg-[#00000050] backdrop-blur-md border-b-[1px] border-[#353535]"
       >
         <nav className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-12 h-20 flex items-center justify-between relative">
           {/* Logo */}
@@ -90,11 +90,11 @@ const Header = () => {
 
           {/* Mobile Dropdown Menu - Positioned relative to nav */}
           <div
-            className={`absolute left-0 right-0 top-full md:hidden bg-background/95 backdrop-blur-md border-b border-border overflow-hidden transition-all duration-300 ${
+            className={`absolute left-0 right-0 top-full md:hidden  backdrop-blur-md border-b border-border overflow-hidden transition-all duration-300 ${
               isMenuOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0 pointer-events-none"
             }`}
           >
-        <div className="max-w-9xl mx-auto px-4 sm:px-6 py-4 flex flex-col gap-2">
+        <div className="max-w-9xl mx-auto backdrop-blur-md bg-[#000000B8] px-4 sm:px-6 py-4 flex flex-col gap-2">
           {navigationItems.map((item, index) => (
             <a
               key={item.href}
