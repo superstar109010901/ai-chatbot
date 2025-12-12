@@ -149,7 +149,7 @@ export default function PricingSection() {
               }}
             >
               {pricingPlans.map((plan, index) => (
-                <SwiperSlide key={index} className="!h-auto max-w-[382px] min-w-[360px]">
+                <SwiperSlide key={index} className="!h-auto max-w-[382px] min-w-[375px]">
                   <div className="h-full">
                     <PricingCard
                       planName={plan.planName}
