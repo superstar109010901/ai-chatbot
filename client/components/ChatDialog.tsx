@@ -106,12 +106,7 @@ const ChatDialog = ({ onBack }: ChatDialogProps) => {
           </button>
         </div>
 
-        {/* Time Divider */}
-        {/* <div className="flex items-center justify-center py-2 md:py-3">
-          <span className="text-gray-500 font-poppins text-xs md:text-sm">
-            Today 10:25pm
-          </span>
-        </div> */}
+        
       </div>
 
       {/* Messages Container */}
