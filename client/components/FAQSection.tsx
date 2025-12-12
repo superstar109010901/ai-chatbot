@@ -36,9 +36,9 @@ const FAQSection = () => {
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
       
         {/* Bottom Gradient Orbs */}
-        <div className="absolute left-12 bottom-12 w-[293px] h-[293px]  bg-gradient-to-t from-blue-600 to-transparent rounded-full blur-3xl opacity-30" />
-        <div className="absolute left-1/3 bottom-12 w-[293px] h-[293px] bg-gradient-to-t from-blue-600 to-transparent rounded-full blur-3xl opacity-30" />
-        <div className="absolute left-1/2 bottom-12 w-[293px] h-[293px] bg-gradient-to-t from-blue-600 to-transparent rounded-full blur-3xl opacity-30" />
+        <img src="/blurred.png" className="absolute scale-110 left-[110px] bottom-12 " />
+        <img src="/blurred.png" className="absolute scale-110 left-1/4 bottom-12  " />
+        <img src="/blurred.png" className="absolute scale-110 left-1/3 bottom-12  " />
       </div>
 
       {/* Content */}
