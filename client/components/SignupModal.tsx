@@ -87,9 +87,7 @@ const SignupModal = () => {
               <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-900/20 rounded-full blur-3xl" />
             </div>
 
-            {/* Content */}
             <div className="relative p-[4.5rem] z-10">
-              {/* Header */}
               <div className="text-center mb-8">
                 <h2 className="text-3xl sm:text-4xl font-semibold line-height-[140%] text-white mb-5">
                   Sign Up
