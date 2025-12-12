@@ -144,7 +144,6 @@ const SignupModal = () => {
                   />
                 </div>
 
-                {/* Password Field */}
                 <div className="space-y-2">
                   <label htmlFor="password" className="block text-sm font-medium text-white">
                     Password
@@ -181,7 +180,6 @@ const SignupModal = () => {
                   </div>
                 </div>
 
-                {/* Register Button */}
                 <button
                   type="submit"
                   className="w-full mt-6 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/25 transition-all shadow-lg"
