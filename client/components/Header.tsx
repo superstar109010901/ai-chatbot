@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "./AuthContext";
+import { useAppSelector, useAppDispatch } from "../store/hooks";
+import { logout } from "../store/slices/authSlice";
+import UserDropdown from "./UserDropdown";
 
 const navigationItems = [
   { label: "Features", href: "#features" },
@@ -10,9 +13,41 @@ const navigationItems = [
   { label: "FAQ", href: "#faq" },
 ];
 
+const MobileUserMenu = ({ closeMenu, isMenuOpen, navigationItemsLength }: { closeMenu: () => void; isMenuOpen: boolean; navigationItemsLength: number }) => {
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.auth);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    closeMenu();
+  };
+
+  return (
+    <div className={`w-full mt-4 space-y-2 ${
+      isMenuOpen
+        ? "translate-y-0 opacity-100"
+        : "-translate-y-2 opacity-0 pointer-events-none"
+    }`}
+    style={{
+      transitionDelay: isMenuOpen ? `${navigationItemsLength * 50}ms` : "0ms",
+    }}>
+      <div className="px-4 py-2 text-sm text-foreground/70">
+        {user?.email}
+      </div>
+      <button
+        onClick={handleLogout}
+        className="w-full px-4 py-3 rounded-lg bg-red-600 text-white font-medium text-base hover:bg-red-700 transition-colors"
+      >
+        Sign Out
+      </button>
+    </div>
+  );
+};
+
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { openLoginModal } = useAuth();
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -49,13 +84,17 @@ const Header = () => {
             ))}
           </div>
 
-          {/* Get Started Button */}
-          <button
-            onClick={openLoginModal}
-            className="hidden md:flex items-center justify-center px-6 h-10 rounded-lg bg-primary text-primary-foreground font-medium text-md hover:opacity-90 transition-opacity shadow-lg hover:shadow-xl"
-          >
-            Get Started
-          </button>
+          {/* Get Started Button or User Dropdown */}
+          {isAuthenticated ? (
+            <UserDropdown className="hidden md:flex" />
+          ) : (
+            <button
+              onClick={openLoginModal}
+              className="hidden md:flex items-center justify-center px-6 h-10 rounded-lg bg-primary text-primary-foreground font-medium text-md hover:opacity-90 transition-opacity shadow-lg hover:shadow-xl"
+            >
+              Get Started
+            </button>
+          )}
 
           {/* Mobile Menu Button */}
           <button
@@ -112,22 +151,26 @@ const Header = () => {
               {item.label}
             </a>
           ))}
-          <button
-            onClick={() => {
-              openLoginModal();
-              closeMenu();
-            }}
-            className={`w-full mt-4 px-4 py-3 rounded-lg bg-primary text-primary-foreground font-medium text-base hover:opacity-90 transition-all duration-200 ${
-              isMenuOpen
-                ? "translate-y-0 opacity-100"
-                : "-translate-y-2 opacity-0 pointer-events-none"
-            }`}
-            style={{
-              transitionDelay: isMenuOpen ? `${navigationItems.length * 50}ms` : "0ms",
-            }}
-          >
-            Get Started
-          </button>
+          {isAuthenticated ? (
+            <MobileUserMenu closeMenu={closeMenu} isMenuOpen={isMenuOpen} navigationItemsLength={navigationItems.length} />
+          ) : (
+            <button
+              onClick={() => {
+                openLoginModal();
+                closeMenu();
+              }}
+              className={`w-full mt-4 px-4 py-3 rounded-lg bg-primary text-primary-foreground font-medium text-base hover:opacity-90 transition-all duration-200 ${
+                isMenuOpen
+                  ? "translate-y-0 opacity-100"
+                  : "-translate-y-2 opacity-0 pointer-events-none"
+              }`}
+              style={{
+                transitionDelay: isMenuOpen ? `${navigationItems.length * 50}ms` : "0ms",
+              }}
+            >
+              Get Started
+            </button>
+          )}
         </div>
         </div>
       </nav>

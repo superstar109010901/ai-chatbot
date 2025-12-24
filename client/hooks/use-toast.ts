@@ -3,7 +3,8 @@ import * as React from "react";
 import type { ToastActionElement, ToastProps } from "@/components/ui/toast";
 
 const TOAST_LIMIT = 1;
-const TOAST_REMOVE_DELAY = 1000000;
+const TOAST_REMOVE_DELAY = 1000; // Time to wait before removing toast from DOM after dismissal
+const TOAST_DEFAULT_DURATION = 5000; // Default duration: 5 seconds
 
 type ToasterToast = ToastProps & {
   id: string;
@@ -51,6 +52,7 @@ interface State {
 }
 
 const toastTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
+const toastDismissTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
 
 const addToRemoveQueue = (toastId: string) => {
   if (toastTimeouts.has(toastId)) {
@@ -87,12 +89,21 @@ export const reducer = (state: State, action: Action): State => {
     case "DISMISS_TOAST": {
       const { toastId } = action;
 
-      // ! Side effects ! - This could be extracted into a dismissToast() action,
-      // but I'll keep it here for simplicity
+      // Clear dismiss timeout if toast is dismissed early
       if (toastId) {
+        const dismissTimeout = toastDismissTimeouts.get(toastId);
+        if (dismissTimeout) {
+          clearTimeout(dismissTimeout);
+          toastDismissTimeouts.delete(toastId);
+        }
         addToRemoveQueue(toastId);
       } else {
         state.toasts.forEach((toast) => {
+          const dismissTimeout = toastDismissTimeouts.get(toast.id);
+          if (dismissTimeout) {
+            clearTimeout(dismissTimeout);
+            toastDismissTimeouts.delete(toast.id);
+          }
           addToRemoveQueue(toast.id);
         });
       }
@@ -134,9 +145,9 @@ function dispatch(action: Action) {
   });
 }
 
-type Toast = Omit<ToasterToast, "id">;
+type Toast = Omit<ToasterToast, "id"> & { duration?: number };
 
-function toast({ ...props }: Toast) {
+function toast({ duration = TOAST_DEFAULT_DURATION, ...props }: Toast) {
   const id = genId();
 
   const update = (props: ToasterToast) =>
@@ -152,11 +163,21 @@ function toast({ ...props }: Toast) {
       ...props,
       id,
       open: true,
+      duration,
       onOpenChange: (open) => {
         if (!open) dismiss();
       },
     },
   });
+
+  // Auto-dismiss after duration
+  if (duration > 0) {
+    const dismissTimeout = setTimeout(() => {
+      dismiss();
+      toastDismissTimeouts.delete(id);
+    }, duration);
+    toastDismissTimeouts.set(id, dismissTimeout);
+  }
 
   return {
     id: id,
