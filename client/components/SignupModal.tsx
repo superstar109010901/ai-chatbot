@@ -1,9 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "./AuthContext";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { register, clearError } from "../store/slices/authSlice";
+import { toast } from "@/components/ui/use-toast";
 
 const SignupModal = () => {
   const { authModal, closeAuthModal, openLoginModal } = useAuth();
+  const dispatch = useAppDispatch();
+  const { isLoading, error } = useAppSelector((state) => state.auth);
+  const registrationSuccessRef = useRef(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -11,6 +17,51 @@ const SignupModal = () => {
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
+
+  // Clear error when modal opens
+  useEffect(() => {
+    if (authModal === "signup") {
+      dispatch(clearError());
+    }
+  }, [authModal, dispatch]);
+
+  // Track previous loading state to detect when registration completes
+  const prevLoadingRef = useRef(isLoading);
+  
+  // Show success toast and close modal on successful registration
+  useEffect(() => {
+    // If we were loading and now we're not, and there's no error, registration succeeded
+    if (prevLoadingRef.current && !isLoading && !error && authModal === "signup" && !registrationSuccessRef.current) {
+      registrationSuccessRef.current = true;
+      toast({
+        title: "Success",
+        description: "Account created successfully! Please sign in.",
+      });
+      closeAuthModal();
+      // Switch to login modal after a short delay
+      setTimeout(() => {
+        openLoginModal();
+        registrationSuccessRef.current = false;
+      }, 300);
+    }
+    prevLoadingRef.current = isLoading;
+    
+    // Reset success flag if modal closes
+    if (authModal !== "signup") {
+      registrationSuccessRef.current = false;
+    }
+  }, [isLoading, error, authModal, closeAuthModal, openLoginModal]);
+
+  // Show error toast
+  useEffect(() => {
+    if (error && authModal === "signup") {
+      toast({
+        title: "Registration Failed",
+        description: error,
+        variant: "destructive",
+      });
+    }
+  }, [error, authModal]);
 
   const isOpen = authModal === "signup";
 
@@ -59,6 +110,28 @@ const SignupModal = () => {
     setTimeout(() => openLoginModal(), 150);
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.password) {
+      toast({
+        title: "Validation Error",
+        description: "Please fill in all fields",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Combine first and last name for backend
+    const name = `${formData.firstName} ${formData.lastName}`.trim();
+    
+    dispatch(register({ 
+      email: formData.email, 
+      password: formData.password, 
+      name 
+    }));
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -95,7 +168,7 @@ const SignupModal = () => {
               </div>
 
               {/* Form */}
-              <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
+              <form className="space-y-5" onSubmit={handleSubmit}>
                 {/* Name Fields */}
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
@@ -182,9 +255,10 @@ const SignupModal = () => {
 
                 <button
                   type="submit"
-                  className="w-full mt-6 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/25 transition-all shadow-lg"
+                  disabled={isLoading}
+                  className="w-full mt-6 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/25 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Register
+                  {isLoading ? "Creating account..." : "Register"}
                 </button>
               </form>
 

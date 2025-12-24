@@ -6,6 +6,8 @@ import SequentialReveal from "./SequentialReveal";
 import AnimatedChatBubble from "./AnimatedChatBubble";
 import { ChatbotSettingsModal } from "./ChatbotSettingModal";
 import { motion } from "framer-motion";
+import { useAppSelector } from "../store/hooks";
+import UserDropdown from "./UserDropdown";
 
 const BotIcon = () => (
   <svg
@@ -56,6 +58,7 @@ const BotIcon = () => (
 const HeroSection = () => {
   const { openLoginModal } = useAuth();
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
   
   return (
     <>
@@ -139,12 +142,16 @@ const HeroSection = () => {
 
             {/* CTA Buttons */}
             <div className="w-full flex gap-3 sm:gap-2.5 ">
-              <button
-                onClick={openLoginModal}
-                className="px-6 py-3 w-[173px] h-[63px] sm:py-3.5 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium text-sm sm:text-base hover:shadow-lg transition-all shadow-[0_8px_40px_0_rgba(0,85,254,0.5),0_0_0_1px_rgba(0,32,158,0.12)]"
-              >
-                Get Started
-              </button>
+              {isAuthenticated ? (
+                <UserDropdown />
+              ) : (
+                <button
+                  onClick={openLoginModal}
+                  className="px-6 py-3 w-[173px] h-[63px] sm:py-3.5 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium text-sm sm:text-base hover:shadow-lg transition-all shadow-[0_8px_40px_0_rgba(0,85,254,0.5),0_0_0_1px_rgba(0,32,158,0.12)]"
+                >
+                  Get Started
+                </button>
+              )}
               <button 
                 onClick={() => setIsDemoModalOpen(true)}
                 className="px-6 py-3 w-[173px] h-[63px] sm:py-3.5 rounded-lg border border-blue-500 bg-transparent text-white font-medium text-sm sm:text-base hover:bg-blue-500/10 transition-colors"
@@ -222,12 +229,16 @@ const HeroSection = () => {
 
             {/* CTA Buttons */}
             <div className="pt-4 flex gap-4">
-              <button
-                onClick={openLoginModal}
-                className="px-8 py-3.5 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium text-sm hover:shadow-lg transition-all shadow-[0_8px_40px_0_rgba(0,85,254,0.5),0_0_0_1px_rgba(0,32,158,0.12)]"
-              >
-                Get Started
-              </button>
+              {isAuthenticated ? (
+                <UserDropdown />
+              ) : (
+                <button
+                  onClick={openLoginModal}
+                  className="px-8 py-3.5 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium text-sm hover:shadow-lg transition-all shadow-[0_8px_40px_0_rgba(0,85,254,0.5),0_0_0_1px_rgba(0,32,158,0.12)]"
+                >
+                  Get Started
+                </button>
+              )}
               <button 
                 onClick={() => setIsDemoModalOpen(true)}
                 className="px-8 py-3.5 rounded-lg border border-blue-500 bg-transparent text-white font-medium text-sm hover:bg-blue-500/10 transition-colors"

@@ -1,13 +1,47 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "./AuthContext";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { login, clearError } from "../store/slices/authSlice";
+import { toast } from "@/components/ui/use-toast";
 
 const LoginModal = () => {
   const { authModal, closeAuthModal, openSignupModal } = useAuth();
+  const dispatch = useAppDispatch();
+  const { isLoading, error, isAuthenticated } = useAppSelector((state) => state.auth);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+
+  // Clear error when modal opens
+  useEffect(() => {
+    if (authModal === "login") {
+      dispatch(clearError());
+    }
+  }, [authModal, dispatch]);
+
+  // Close modal and show success toast on successful login
+  useEffect(() => {
+    if (isAuthenticated && authModal === "login") {
+      closeAuthModal();
+      toast({
+        title: "Success",
+        description: "Logged in successfully!",
+      });
+    }
+  }, [isAuthenticated, authModal, closeAuthModal]);
+
+  // Show error toast
+  useEffect(() => {
+    if (error) {
+      toast({
+        title: "Login Failed",
+        description: error,
+        variant: "destructive",
+      });
+    }
+  }, [error]);
 
   const isOpen = authModal === "login";
 
@@ -46,6 +80,21 @@ const LoginModal = () => {
   const handleSwitchToSignup = () => {
     closeAuthModal();
     setTimeout(() => openSignupModal(), 150);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!email || !password) {
+      toast({
+        title: "Validation Error",
+        description: "Please fill in all fields",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    dispatch(login({ email, password }));
   };
 
   return (
@@ -89,7 +138,7 @@ const LoginModal = () => {
               </div>
 
               {/* Form */}
-              <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
+              <form className="space-y-5" onSubmit={handleSubmit}>
                 {/* Email Field */}
                 <div className="space-y-2">
                   <label htmlFor="email" className="block text-sm font-medium text-white">
@@ -163,9 +212,10 @@ const LoginModal = () => {
                 {/* Login Button */}
                 <button
                   type="submit"
-                  className="w-full mt-6 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/25 transition-all shadow-lg"
+                  disabled={isLoading}
+                  className="w-full mt-6 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/25 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Log In
+                  {isLoading ? "Logging in..." : "Log In"}
                 </button>
               </form>
 
