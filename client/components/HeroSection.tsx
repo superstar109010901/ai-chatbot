@@ -145,12 +145,12 @@ const HeroSection = () => {
               {isAuthenticated ? (
                 <UserDropdown />
               ) : (
-                <button
-                  onClick={openLoginModal}
-                  className="px-6 py-3 w-[173px] h-[63px] sm:py-3.5 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium text-sm sm:text-base hover:shadow-lg transition-all shadow-[0_8px_40px_0_rgba(0,85,254,0.5),0_0_0_1px_rgba(0,32,158,0.12)]"
-                >
-                  Get Started
-                </button>
+              <button
+                onClick={openLoginModal}
+                className="px-6 py-3 w-[173px] h-[63px] sm:py-3.5 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium text-sm sm:text-base hover:shadow-lg transition-all shadow-[0_8px_40px_0_rgba(0,85,254,0.5),0_0_0_1px_rgba(0,32,158,0.12)]"
+              >
+                Get Started
+              </button>
               )}
               <button 
                 onClick={() => setIsDemoModalOpen(true)}
@@ -232,12 +232,12 @@ const HeroSection = () => {
               {isAuthenticated ? (
                 <UserDropdown />
               ) : (
-                <button
-                  onClick={openLoginModal}
-                  className="px-8 py-3.5 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium text-sm hover:shadow-lg transition-all shadow-[0_8px_40px_0_rgba(0,85,254,0.5),0_0_0_1px_rgba(0,32,158,0.12)]"
-                >
-                  Get Started
-                </button>
+              <button
+                onClick={openLoginModal}
+                className="px-8 py-3.5 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium text-sm hover:shadow-lg transition-all shadow-[0_8px_40px_0_rgba(0,85,254,0.5),0_0_0_1px_rgba(0,32,158,0.12)]"
+              >
+                Get Started
+              </button>
               )}
               <button 
                 onClick={() => setIsDemoModalOpen(true)}
