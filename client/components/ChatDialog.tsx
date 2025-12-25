@@ -1,10 +1,22 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
+import { useSocket } from "../hooks/useSocket";
+import { useAppSelector } from "../store/hooks";
+import { chatbotAPI, uploadAPI } from "../services/api";
+import { EmojiPickerButton } from "./EmojiPicker";
+import { validateFile, formatFileSize, getFileCategory } from "../utils/fileValidation";
+import { toast } from "@/components/ui/use-toast";
 
 interface ChatMessage {
   id: string;
   type: "bot" | "user";
   text: string;
-  timestamp?: string;
+  timestamp?: Date;
+  attachment?: {
+    filename: string;
+    url: string;
+    type: string;
+    size: number;
+  };
 }
 
 interface ChatDialogProps {
@@ -13,39 +25,64 @@ interface ChatDialogProps {
 
 const ChatDialog = ({ onBack }: ChatDialogProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [inputValue, setInputValue] = useState("");
+  const [isSending, setIsSending] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
-  const messages: ChatMessage[] = [
-    {
-      id: "1",
-      type: "bot",
-      text: "Hi, there nice to meet you, hope you are doing great",
-    },
-    {
-      id: "2",
-      type: "bot",
-      text: "Ready to go?",
-    },
-    {
-      id: "3",
-      type: "user",
-      text: "I'm ready yo go, we can get started right now.",
-    },
-    {
-      id: "4",
-      type: "bot",
-      text: "Hi, there nice to meet you, hope you are doing great",
-    },
-    {
-      id: "5",
-      type: "bot",
-      text: "Ready to go?",
-    },
-    {
-      id: "6",
-      type: "user",
-      text: "I'm ready yo go, we can get started right now.",
-    },
-  ];
+  // Get chatbot from Redux
+  const { chatbots } = useAppSelector((state) => state.chatbot);
+  const [defaultChatbotId, setDefaultChatbotId] = useState<string | null>(null);
+  
+  // Fetch default chatbot if no chatbots available
+  useEffect(() => {
+    const fetchDefaultChatbot = async () => {
+      if (chatbots.length === 0 && !defaultChatbotId) {
+        try {
+          const response = await chatbotAPI.getDefaultChatbot();
+          if (response.success && response.data.chatbot) {
+            setDefaultChatbotId(response.data.chatbot.embedCode);
+          }
+        } catch (error) {
+          console.error("Failed to fetch default chatbot:", error);
+        }
+      }
+    };
+    
+    fetchDefaultChatbot();
+  }, [chatbots.length, defaultChatbotId]);
+  
+  // Use the first active chatbot, or fallback to default chatbot
+  const activeChatbot = chatbots.find(c => c.isActive) || chatbots[0];
+  const chatbotId = activeChatbot?.embedCode || defaultChatbotId;
+  
+  // Generate or get visitor ID from localStorage
+  const getVisitorId = () => {
+    let visitorId = localStorage.getItem("chatbot_visitor_id");
+    if (!visitorId) {
+      visitorId = `visitor_${Math.random().toString(36).substr(2, 9)}_${Date.now()}`;
+      localStorage.setItem("chatbot_visitor_id", visitorId);
+    }
+    return visitorId;
+  };
+
+  const visitorId = getVisitorId();
+
+  // Only enable socket connection if we have a valid chatbot
+  const { messages, sendMessage, isConnected, error } = useSocket({
+    chatbotId: chatbotId || "",
+    visitorId,
+    enabled: !!chatbotId, // Only enable if chatbotId exists
+  });
+
+  // Convert socket messages to ChatMessage format
+  const chatMessages: ChatMessage[] = messages.map((msg, index) => ({
+    id: `msg-${index}-${msg.timestamp?.getTime() || Date.now()}`,
+    type: msg.role === "assistant" ? "bot" : "user",
+    text: msg.content,
+    timestamp: msg.timestamp,
+  }));
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -53,12 +90,107 @@ const ChatDialog = ({ onBack }: ChatDialogProps) => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [chatMessages]);
+
+  const handleSend = () => {
+    if (!inputValue.trim() || !isConnected || isSending || isUploading) {
+      return;
+    }
+
+    setIsSending(true);
+    sendMessage(inputValue);
+    setInputValue("");
+    
+    // Reset sending state after a short delay
+    setTimeout(() => {
+      setIsSending(false);
+    }, 500);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
+  const handleEmojiClick = (emoji: string) => {
+    setInputValue((prev) => prev + emoji);
+    // Focus input after emoji is added
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 0);
+  };
+
+  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file
+    const validation = validateFile(file);
+    if (!validation.isValid) {
+      toast({
+        title: "File Upload Error",
+        description: validation.error,
+        variant: "destructive",
+      });
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      return;
+    }
+
+    setIsUploading(true);
+
+    try {
+      // Upload file
+      const response = await uploadAPI.uploadFile(file);
+      
+      if (response.success) {
+        const uploadedFile = response.data.file;
+        
+        // Send message with attachment
+        if (isConnected && chatbotId) {
+          const messageText = inputValue.trim() || `📎 ${uploadedFile.originalName}`;
+          sendMessage(messageText);
+          
+          // Add attachment info to the message (this would ideally be handled by the backend)
+          // For now, we'll just show a success message
+          toast({
+            title: "File Uploaded",
+            description: `${uploadedFile.originalName} (${formatFileSize(uploadedFile.size)})`,
+          });
+          
+          setInputValue("");
+        }
+      }
+    } catch (error: any) {
+      toast({
+        title: "Upload Failed",
+        description: error.response?.data?.error?.message || "Failed to upload file. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUploading(false);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  };
+
+  const handleAttachmentClick = () => {
+    if (!chatbotId || !isConnected || isSending || isUploading) {
+      return;
+    }
+    fileInputRef.current?.click();
+  };
 
   return (
-    <div className="w-full h-full flex flex-col bg-[#030306]">
+    <div className="w-full h-full flex flex-col bg-[#030306] min-h-0">
       {/* Header */}
-      <div className="flex-shrink-0 border-b border-white/20 bg-[#030306]">
+      <div className="flex-shrink-0 border-b border-white/20 bg-[#030306] z-10">
         <div className="flex items-center justify-between p-4 md:p-6">
           <button
             onClick={onBack}
@@ -109,9 +241,37 @@ const ChatDialog = ({ onBack }: ChatDialogProps) => {
         
       </div>
 
+      {/* Connection Status */}
+      {!chatbotId && (
+        <div className="px-4 md:px-6 py-2 bg-yellow-500/20 text-yellow-400 text-xs">
+          No chatbot available. Please create a chatbot in the dashboard first.
+        </div>
+      )}
+      {chatbotId && error && (
+        <div className="px-4 md:px-6 py-2 bg-red-500/20 text-red-400 text-xs">
+          {error}
+        </div>
+      )}
+      {chatbotId && !isConnected && !error && (
+        <div className="px-4 md:px-6 py-2 bg-yellow-500/20 text-yellow-400 text-xs">
+          Connecting...
+        </div>
+      )}
+
       {/* Messages Container */}
-      <div className="flex-1 overflow-y-auto px-4 md:px-6 py-4 md:py-6 space-y-4 md:space-y-6 scrollbar-hide">
-        {messages.map((message) => (
+      <div className="flex-1 overflow-y-auto px-4 md:px-6 py-4 md:py-6 space-y-4 md:space-y-6 custom-scrollbar min-h-0">
+        {!chatbotId && (
+          <div className="text-center text-white/50 text-sm py-8">
+            <p className="mb-4">No chatbot available.</p>
+            <p className="text-xs">Please create a chatbot in your dashboard to start chatting.</p>
+          </div>
+        )}
+        {chatbotId && chatMessages.length === 0 && isConnected && (
+          <div className="text-center text-white/50 text-sm py-8">
+            Start a conversation...
+          </div>
+        )}
+        {chatMessages.map((message) => (
           <div
             key={message.id}
             className={`flex items-end gap-2 md:gap-3 ${
@@ -183,15 +343,43 @@ const ChatDialog = ({ onBack }: ChatDialogProps) => {
             )}
 
             <div
-              className={`max-w-xs md:max-w-sm flex justify-center items-center px-3 md:px-4 py-2 md:py-3 rounded-xl ${
+              className={`max-w-xs md:max-w-sm flex flex-col gap-2 px-3 md:px-4 py-2 md:py-3 rounded-xl ${
                 message.type === "bot"
                   ? "bg-white/10 text-white rounded-bl-none"
                   : "bg-white/15 text-white rounded-br-none"
               }`}
             >
-              <p className="font-poppins text-xs md:text-sm leading-tight md:leading-snug font-normal break-words">
-                {message.text}
-              </p>
+              {message.text && (
+                <p className="font-poppins text-xs md:text-sm leading-tight md:leading-snug font-normal break-words">
+                  {message.text}
+                </p>
+              )}
+              {message.attachment && (
+                <a
+                  href={message.attachment.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-xs text-white/70 hover:text-white transition-colors underline"
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M8 2V10M8 2L5 5M8 2L11 5M3 10V13C3 13.5304 3.21071 14.0391 3.58579 14.4142C3.96086 14.7893 4.46957 15 5 15H11C11.5304 15 12.0391 14.7893 12.4142 14.4142C12.7893 14.0391 13 13.5304 13 13V10"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  <span className="truncate">{message.attachment.filename}</span>
+                  <span className="text-white/50">({formatFileSize(message.attachment.size)})</span>
+                </a>
+              )}
             </div>
           </div>
         ))}
@@ -199,11 +387,23 @@ const ChatDialog = ({ onBack }: ChatDialogProps) => {
       </div>
 
       {/* Input Area */}
-      <div className="flex-shrink-0  bg-[#030306] p-4 md:p-6">
-        <div className="flex items-center gap-2 md:gap-3">
+      <div className="flex-shrink-0 bg-[#030306] p-4 md:p-6">
+        <div className="flex items-center gap-2 md:gap-3 h-10">
+          {/* Hidden File Input */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".jpg,.jpeg,.png,.gif,.txt,.rtf,.xlsx,.docx,.pdf,.mp3,.mp4"
+            onChange={handleFileSelect}
+            className="hidden"
+            disabled={!chatbotId || !isConnected || isSending || isUploading}
+          />
+
           {/* Attachment Icon */}
           <button
-            className="flex-shrink-0 text-[#FFFFFF17] transition-opacity"
+            onClick={handleAttachmentClick}
+            disabled={!chatbotId || !isConnected || isSending || isUploading}
+            className="flex-shrink-0 w-5 h-5 flex items-center justify-center text-[#FFFFFF17] hover:text-white/50 transition-opacity disabled:opacity-30 disabled:cursor-not-allowed"
             aria-label="Attach file"
           >
             <svg
@@ -224,60 +424,34 @@ const ChatDialog = ({ onBack }: ChatDialogProps) => {
             </svg>
           </button>
 
-          {/* Emoji Icon */}
-          <button
-            className="flex-shrink-0 text-[#FFFFFF17] transition-opacity"
-            aria-label="Add emoji"
-          >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M10.0003 17.7083C14.2575 17.7083 17.7087 14.2572 17.7087 9.99999C17.7087 5.74279 14.2575 2.29166 10.0003 2.29166C5.74313 2.29166 2.29199 5.74279 2.29199 9.99999C2.29199 14.2572 5.74313 17.7083 10.0003 17.7083Z"
-                stroke="white"
-                strokeOpacity="0.09"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M7.50065 8.95833C8.07595 8.95833 8.54232 8.49196 8.54232 7.91667C8.54232 7.34137 8.07595 6.875 7.50065 6.875C6.92535 6.875 6.45898 7.34137 6.45898 7.91667C6.45898 8.49196 6.92535 8.95833 7.50065 8.95833Z"
-                fill="white"
-                fillOpacity="0.09"
-              />
-              <path
-                d="M12.5007 8.95833C13.0759 8.95833 13.5423 8.49196 13.5423 7.91667C13.5423 7.34137 13.0759 6.875 12.5007 6.875C11.9254 6.875 11.459 7.34137 11.459 7.91667C11.459 8.49196 11.9254 8.95833 12.5007 8.95833Z"
-                fill="white"
-                fillOpacity="0.09"
-              />
-              <path
-                d="M12.8866 11.875C12.594 12.3817 12.1733 12.8024 11.6665 13.095C11.1598 13.3875 10.585 13.5415 9.99995 13.5415C9.41485 13.5415 8.84007 13.3875 8.33335 13.095C7.82664 12.8024 7.40585 12.3817 7.11328 11.875"
-                stroke="white"
-                strokeOpacity="0.09"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
+          {/* Emoji Picker */}
+          <div className="flex-shrink-0 w-5 h-5 flex items-center justify-center">
+            <EmojiPickerButton
+              onEmojiClick={handleEmojiClick}
+              disabled={!chatbotId || !isConnected || isSending || isUploading}
+            />
+          </div>
 
           {/* Divider */}
           <div className="flex-shrink-0 w-px h-5 bg-white/15" />
 
           {/* Input Field */}
           <input
+            ref={inputRef}
             type="text"
-            placeholder="Type your text here......"
-            className="flex-1 bg-transparent text-white placeholder-white/30 font-poppins text-xs md:text-sm outline-none"
+            placeholder={chatbotId ? "Type your text here......" : "Create a chatbot to start chatting..."}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyPress={handleKeyPress}
+            disabled={!chatbotId || !isConnected || isSending || isUploading}
+            className="flex-1 bg-transparent text-white placeholder-white/30 font-poppins text-xs md:text-sm outline-none disabled:opacity-50 h-5"
           />
 
           {/* Send Button */}
           <button
-            className="flex-shrink-0 w-8 h-8 md:w-9 md:h-9 rounded-full bg-white/30 hover:bg-white/40 transition-colors flex items-center justify-center"
+            onClick={handleSend}
+            disabled={!chatbotId || !isConnected || isSending || isUploading || !inputValue.trim()}
+            className="flex-shrink-0 w-8 h-8 md:w-9 md:h-9 rounded-full bg-white/30 hover:bg-white/40 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
             aria-label="Send message"
           >
             <svg

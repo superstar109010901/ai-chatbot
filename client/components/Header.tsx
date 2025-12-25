@@ -88,12 +88,12 @@ const Header = () => {
           {isAuthenticated ? (
             <UserDropdown className="hidden md:flex" />
           ) : (
-            <button
-              onClick={openLoginModal}
-              className="hidden md:flex items-center justify-center px-6 h-10 rounded-lg bg-primary text-primary-foreground font-medium text-md hover:opacity-90 transition-opacity shadow-lg hover:shadow-xl"
-            >
-              Get Started
-            </button>
+          <button
+            onClick={openLoginModal}
+            className="hidden md:flex items-center justify-center px-6 h-10 rounded-lg bg-primary text-primary-foreground font-medium text-md hover:opacity-90 transition-opacity shadow-lg hover:shadow-xl"
+          >
+            Get Started
+          </button>
           )}
 
           {/* Mobile Menu Button */}
@@ -154,22 +154,22 @@ const Header = () => {
           {isAuthenticated ? (
             <MobileUserMenu closeMenu={closeMenu} isMenuOpen={isMenuOpen} navigationItemsLength={navigationItems.length} />
           ) : (
-            <button
-              onClick={() => {
-                openLoginModal();
-                closeMenu();
-              }}
-              className={`w-full mt-4 px-4 py-3 rounded-lg bg-primary text-primary-foreground font-medium text-base hover:opacity-90 transition-all duration-200 ${
-                isMenuOpen
-                  ? "translate-y-0 opacity-100"
-                  : "-translate-y-2 opacity-0 pointer-events-none"
-              }`}
-              style={{
-                transitionDelay: isMenuOpen ? `${navigationItems.length * 50}ms` : "0ms",
-              }}
-            >
-              Get Started
-            </button>
+          <button
+            onClick={() => {
+              openLoginModal();
+              closeMenu();
+            }}
+            className={`w-full mt-4 px-4 py-3 rounded-lg bg-primary text-primary-foreground font-medium text-base hover:opacity-90 transition-all duration-200 ${
+              isMenuOpen
+                ? "translate-y-0 opacity-100"
+                : "-translate-y-2 opacity-0 pointer-events-none"
+            }`}
+            style={{
+              transitionDelay: isMenuOpen ? `${navigationItems.length * 50}ms` : "0ms",
+            }}
+          >
+            Get Started
+          </button>
           )}
         </div>
         </div>

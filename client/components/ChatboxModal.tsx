@@ -49,14 +49,16 @@ const ChatboxModal = () => {
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed bottom-32 right-8 w-96 max-h-[700px] bg-[#030306] rounded-2xl shadow-2xl overflow-hidden z-[100] flex flex-col"
+          className="fixed bottom-32 right-8 w-96 h-[700px] bg-[#030306] rounded-2xl shadow-2xl overflow-hidden z-[100] flex flex-col min-h-0"
           variants={modalVariants}
           initial="hidden"
           animate="visible"
           exit="exit"
         >
           {activeTab === "chat" ? (
-            <ChatDialog onBack={() => setActiveTab("home")} />
+            <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+              <ChatDialog onBack={() => setActiveTab("home")} />
+            </div>
           ) : (
             <>
               {/* Header Image Section */}
